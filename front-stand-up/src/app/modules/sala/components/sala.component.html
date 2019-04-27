@@ -1,0 +1,11 @@
+<div class="container">
+
+  <app-sala-formulario [sala]="formularioSala" (datosSalaACrear)="salaFormulario($event)"> </app-sala-formulario>
+
+  <div class="p-grid p-dir-rev">
+    <div class="p-col">
+      <p-button icon="pi pi-check" iconPos="right" (onClick)="crearSala()" label="Añadir participantes" full></p-button>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="socket.io.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Hola</h1>
+
+    
+
+    <script>
+        const socketCliente = io('http://localhost:3002/cliente');
+    
+        
+        let nick = ''
+
+        socketCliente.on('connect', () => {
+            console.log('Socket Conectado Correctamente Cliente')
+        });
+
+        
+        socketCliente.on('nuevoClienteEnBroadcast', (usuario) => {
+            console.log('se unio',usuario.nickName)
+        });
+
+        
+        socketCliente.on('cambioDeNick', (usuario) => {
+            console.log('cambio a este nombre: ',usuario.nickName)
+        });
+
+
+        function loginCliente(nombre) {
+            nick = nombre
+            socketCliente.emit('ingresoCliente', nick, (data) => {
+                console.log(data)
+            })
+        }
+        
+        socketCliente.on('enviandoMensajeBroadcast', (mensajeEnBroadcast) => {
+            console.log(`${mensajeEnBroadcast.fecha} ${mensajeEnBroadcast.nick}: ${mensajeEnBroadcast.mensaje}`)
+        });
+
+
+        function mensajeCliente(miMensaje) {
+            socketCliente.emit('enviandoMensaje',{fecha: new Date().toUTCString(), nick:nick, mensaje:miMensaje}, (data) => {
+                console.log(data.mensaje)
+            })
+        }
+
+        socketCliente.on('disconnect', () => {
+            console.log('Se desconecto el Socket cliente')
+        })
+
+    </script>
+</body>
+
+</html>
